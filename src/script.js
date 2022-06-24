@@ -2,7 +2,7 @@ const BASE_CHORD_PATTERN = "(?<base>[A-G](#|b)?)";
 
 const MINOR_CHORD_PATTERN = "(?<minor>(minor|min|m)?)";
 
-const INTERVAL_CHORD_PATTERN = "(?<interval>(\\d)*)";
+const INTERVAL_CHORD_PATTERN = "(?<interval>(\\d\\-|\\d\\+|\\d)*)";
 
 const BASS_CHORD_PATTERN = "(\\/(?<bass>[A-G](#|b)?))?";
 
@@ -12,7 +12,6 @@ const FULL_CHORD_PATTERN =
   INTERVAL_CHORD_PATTERN +
   BASS_CHORD_PATTERN;
 
-// Se a linha possui o padrão, é uma linha de acordes
 const CHORD_LINE_PATTERN =
   "^(?:" +
   BASE_CHORD_PATTERN +
@@ -23,4 +22,32 @@ const CHORD_LINE_PATTERN =
 
 const EOL_PATTERN = /\n/;
 
-const SPACE_PATTERN = /\s/;
+const SPACE_PATTERN = /\s/g;
+
+const CHORD_LINE_REGEX = new RegExp(CHORD_LINE_PATTERN, "gm");
+
+const FULL_CHORD_REGEX = new RegExp(FULL_CHORD_PATTERN, "g");
+
+let cifraEntrada = document.getElementById("cifraEntrada");
+
+let cifraSaida = document.getElementById("cifraSaida");
+
+cifraEntrada.addEventListener("keyup", function () {
+  let content = this.value;
+  let contentSplit = content.split(EOL_PATTERN);
+  let newContent = "";
+
+  for (const line of contentSplit) {
+    let lineTrim = line.replace(SPACE_PATTERN, "");
+    if (CHORD_LINE_REGEX.test(lineTrim)) {
+      newContent +=
+        line.replace(FULL_CHORD_REGEX, function (i) {
+          return "<b>" + i + "</b>";
+        }) + "\n";
+    } else {
+      newContent += line + "\n";
+    }
+  }
+
+  cifraSaida.innerHTML = newContent;
+});
