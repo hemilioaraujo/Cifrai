@@ -13,12 +13,12 @@ const FULL_CHORD_PATTERN =
   BASS_CHORD_PATTERN;
 
 const CHORD_LINE_PATTERN =
-  "^(?:" +
+  "^((?<full>" +
   BASE_CHORD_PATTERN +
   MINOR_CHORD_PATTERN +
   INTERVAL_CHORD_PATTERN +
   BASS_CHORD_PATTERN +
-  ")+$";
+  ")|\\s)+$";
 
 const EOL_PATTERN = /\n/;
 
@@ -38,8 +38,7 @@ cifraEntrada.addEventListener("keyup", function () {
   let newContent = "";
 
   for (const line of contentSplit) {
-    let lineTrim = line.replace(SPACE_PATTERN, "");
-    if (CHORD_LINE_REGEX.test(lineTrim)) {
+    if (CHORD_LINE_REGEX.test(line)) {
       newContent +=
         line.replace(FULL_CHORD_REGEX, function (i) {
           return "<b>" + i + "</b>";
