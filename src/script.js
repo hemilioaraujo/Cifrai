@@ -6,6 +6,10 @@ const INTERVAL_CHORD_PATTERN = "(?<interval>(\\d\\-|\\d\\+|\\d)*)";
 
 const BASS_CHORD_PATTERN = "(\\/(?<bass>[A-G](#|b)?))?";
 
+const SECTION_PATTERN = "^.+:s*$";
+
+const MUSIC_NAME_PATTERN = "^Musica=(.+)$";
+
 const FULL_CHORD_PATTERN =
   BASE_CHORD_PATTERN +
   MINOR_CHORD_PATTERN +
@@ -28,6 +32,10 @@ const CHORD_LINE_REGEX = new RegExp(CHORD_LINE_PATTERN, "gm");
 
 const FULL_CHORD_REGEX = new RegExp(FULL_CHORD_PATTERN, "g");
 
+const SECTION = new RegExp(SECTION_PATTERN);
+
+const MUSIC_NAME = new RegExp(MUSIC_NAME_PATTERN);
+
 let cifraEntrada = document.getElementById("cifraEntrada");
 
 let cifraSaida = document.getElementById("cifraSaida");
@@ -42,8 +50,16 @@ cifraEntrada.addEventListener("keyup", function () {
     if (CHORD_LINE_REGEX.test(lineTrim)) {
       newContent +=
         line.replace(FULL_CHORD_REGEX, function (i) {
-          return "<b>" + i + "</b>";
+          return '<span class="badge bg-warning">' + i + "</span>";
         }) + "\n";
+    } else if (SECTION.test(lineTrim)) {
+      newContent +=
+        line.replace(SECTION, function (i) {
+          return '<span class="badge bg-dark">' + i + "</span>";
+        }) + "\n";
+    } else if (MUSIC_NAME.test(lineTrim)) {
+      let title = lineTrim.match(MUSIC_NAME)[1];
+      newContent += '<span class="fw-bold fs-2">' + title + "</span>" + "\n";
     } else {
       newContent += line + "\n";
     }
