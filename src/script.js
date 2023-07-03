@@ -10,6 +10,8 @@ const SECTION_PATTERN = "^.+:s*$";
 
 const MUSIC_NAME_PATTERN = "^Musica=(.+)$";
 
+const ARTIST_NAME_PATTERN = "^Artista=(.+)$";
+
 const FULL_CHORD_PATTERN =
   BASE_CHORD_PATTERN +
   MINOR_CHORD_PATTERN +
@@ -36,6 +38,8 @@ const SECTION = new RegExp(SECTION_PATTERN);
 
 const MUSIC_NAME = new RegExp(MUSIC_NAME_PATTERN);
 
+const ARTIST_NAME = new RegExp(ARTIST_NAME_PATTERN);
+
 let cifraEntrada = document.getElementById("cifraEntrada");
 
 let cifraSaida = document.getElementById("cifraSaida");
@@ -60,6 +64,10 @@ cifraEntrada.addEventListener("keyup", function () {
     } else if (MUSIC_NAME.test(lineTrim)) {
       let title = lineTrim.match(MUSIC_NAME)[1];
       newContent += '<span class="fw-bold fs-2">' + title + "</span>" + "\n";
+    } else if (ARTIST_NAME.test(lineTrim)) {
+      let artist_name = lineTrim.match(ARTIST_NAME)[1];
+      newContent +=
+        '<span class="fw-bold fs-5">' + artist_name + "</span>" + "\n";
     } else {
       newContent += line + "\n";
     }
